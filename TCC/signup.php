@@ -4,8 +4,16 @@ session_start();
 // Capturar mensagens de erro
 $erro = isset($_SESSION['erro_cadastro']) ? $_SESSION['erro_cadastro'] : '';
 
-// Limpar mensagens da sessão
+// Manter valores dos campos caso haja erro
+$nome_anterior = isset($_SESSION['form_nome']) ? $_SESSION['form_nome'] : '';
+$cnpj_anterior = isset($_SESSION['form_cnpj']) ? $_SESSION['form_cnpj'] : '';
+$email_anterior = isset($_SESSION['form_email']) ? $_SESSION['form_email'] : '';
+
+// Limpar mensagens e dados da sessão
 unset($_SESSION['erro_cadastro']);
+unset($_SESSION['form_nome']);
+unset($_SESSION['form_cnpj']);
+unset($_SESSION['form_email']);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -14,7 +22,7 @@ unset($_SESSION['erro_cadastro']);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estocando - Cadastrar</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body class="bg-[#1a1f2e]">
     <div class="min-h-screen flex">
@@ -34,7 +42,9 @@ unset($_SESSION['erro_cadastro']);
                     <svg class="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
                     </svg>
-                    <p class="text-red-400 text-sm flex-1"><?php echo $erro; ?></p>
+                    <div class="flex-1">
+                        <p class="text-red-400 text-sm"><?php echo $erro; ?></p>
+                    </div>
                 </div>
                 <?php endif; ?>
 
@@ -43,7 +53,7 @@ unset($_SESSION['erro_cadastro']);
 
                 <!-- Social Sign Up Buttons -->
                 <div class="grid grid-cols-2 gap-4 mb-6">
-                    <button class="flex items-center justify-center gap-2 bg-[#252c3d] text-white py-3 px-4 rounded-lg hover:bg-[#2d3548] transition-colors">
+                    <button type="button" class="flex items-center justify-center gap-2 bg-[#252c3d] text-white py-3 px-4 rounded-lg hover:bg-[#2d3548] transition-colors">
                         <svg class="w-5 h-5" viewBox="0 0 24 24">
                             <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                             <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -52,7 +62,7 @@ unset($_SESSION['erro_cadastro']);
                         </svg>
                         Entre com o Google
                     </button>
-                    <button class="flex items-center justify-center gap-2 bg-[#252c3d] text-white py-3 px-4 rounded-lg hover:bg-[#2d3548] transition-colors">
+                    <button type="button" class="flex items-center justify-center gap-2 bg-[#252c3d] text-white py-3 px-4 rounded-lg hover:bg-[#2d3548] transition-colors">
                         <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                         </svg>
@@ -67,7 +77,7 @@ unset($_SESSION['erro_cadastro']);
                 </div>
 
                 <!-- Sign Up Form -->
-                <form id="signupForm" method="POST" action="processCadastro.php">
+                <form id="signupForm" method="POST" action="processCadastro.php" onsubmit="return validarFormulario()">
                     <div class="grid grid-cols-2 gap-4 mb-4">
                         <div>
                             <label for="firstName" class="block text-gray-300 mb-2">
@@ -78,6 +88,7 @@ unset($_SESSION['erro_cadastro']);
                                 id="firstName"
                                 name="firstName"
                                 placeholder="Digite o seu Nome"
+                                value="<?php echo htmlspecialchars($nome_anterior); ?>"
                                 class="w-full bg-[#252c3d] text-white border border-gray-700 rounded-lg py-3 px-4 focus:outline-none focus:border-blue-500 transition-colors"
                                 required
                             />
@@ -91,6 +102,7 @@ unset($_SESSION['erro_cadastro']);
                                 id="cnpjSignup"
                                 name="cnpj"
                                 placeholder="00.000.000/0000-00"
+                                value="<?php echo htmlspecialchars($cnpj_anterior); ?>"
                                 maxlength="18"
                                 class="w-full bg-[#252c3d] text-white border border-gray-700 rounded-lg py-3 px-4 focus:outline-none focus:border-blue-500 transition-colors"
                                 required
@@ -107,6 +119,7 @@ unset($_SESSION['erro_cadastro']);
                             id="email"
                             name="email"
                             placeholder="Digite o seu email"
+                            value="<?php echo htmlspecialchars($email_anterior); ?>"
                             class="w-full bg-[#252c3d] text-white border border-gray-700 rounded-lg py-3 px-4 focus:outline-none focus:border-blue-500 transition-colors"
                             required
                         />
@@ -124,6 +137,7 @@ unset($_SESSION['erro_cadastro']);
                                 placeholder="Crie sua Senha"
                                 class="w-full bg-[#252c3d] text-white border border-gray-700 rounded-lg py-3 px-4 pr-12 focus:outline-none focus:border-blue-500 transition-colors"
                                 required
+                                minlength="6"
                             />
                             <button
                                 type="button"
@@ -136,11 +150,27 @@ unset($_SESSION['erro_cadastro']);
                                 </svg>
                             </button>
                         </div>
+                        <p class="text-gray-500 text-xs mt-1">Mínimo de 6 caracteres</p>
+                    </div>
+
+                    <!-- Indicador de validação -->
+                    <div id="loadingIndicator" class="hidden mb-4">
+                        <div class="bg-blue-900/20 border border-blue-500 rounded-lg p-3 flex items-center gap-3">
+                            <svg class="animate-spin h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <div class="flex-1">
+                                <p class="text-blue-400 text-sm font-medium">Validando seus dados...</p>
+                                <p class="text-blue-300 text-xs">Verificando e-mail e CNPJ na base de dados</p>
+                            </div>
+                        </div>
                     </div>
 
                     <button
                         type="submit"
-                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors"
+                        id="submitBtn"
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         Cadastrar-se
                     </button>
@@ -181,5 +211,20 @@ unset($_SESSION['erro_cadastro']);
     </div>
 
     <script src="js/script.js"></script>
+    <script>
+        function validarFormulario() {
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // Mostra indicador de carregamento
+            if (loadingIndicator) {
+                loadingIndicator.classList.remove('hidden');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<svg class="animate-spin h-5 w-5 mx-auto" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+            }
+            
+            return true;
+        }
+    </script>
 </body>
 </html>
