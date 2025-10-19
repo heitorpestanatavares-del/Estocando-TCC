@@ -1,0 +1,11 @@
+# Ignorar arquivos e pastas do XAMPP
+*.sql
+/xampp/
+/tmp/
+/logs/
+
+# Ignorar arquivos temporários e do sistema
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
