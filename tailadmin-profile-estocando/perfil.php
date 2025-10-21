@@ -12,36 +12,6 @@
 </head>
 <body>
     <?php include 'sidebar.php'; ?>
-    
-    <div class="main-wrapper">
-        <header class="top-header">
-            <div class="search-bar">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM19 19l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                <input type="text" placeholder="Procurar">
-            </div>
-            
-            <div class="header-actions">
-                <button class="icon-btn">
-                    <img src="https://flagcdn.com/w40/gb.png" alt="EN" class="flag-icon">
-                </button>
-                <button class="icon-btn">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M10 2a6 6 0 0 1 6 6v3.586l.707.707A1 1 0 0 1 16 14H4a1 1 0 0 1-.707-1.707L4 11.586V8a6 6 0 0 1 6-6zM10 18a3 3 0 0 1-3-3h6a3 3 0 0 1-3 3z"/>
-                    </svg>
-                </button>
-                <button class="icon-btn notification-btn">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M10 2a6 6 0 0 1 6 6v3.586l.707.707A1 1 0 0 1 16 14H4a1 1 0 0 1-.707-1.707L4 11.586V8a6 6 0 0 1 6-6z"/>
-                    </svg>
-                    <span class="notification-badge"></span>
-                </button>
-                <div class="user-menu">
-                    <img src="https://via.placeholder.com/40" alt="User" class="user-avatar">
-                </div>
-            </div>
-        </header>
 
         <main class="main-content">
             <div class="breadcrumb">
@@ -73,12 +43,6 @@
                                         <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zM5.78 8.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5zm3.5 0a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5z"/>
                                     </svg>
                                     maianobara.com
-                                </a>
-                                <a href="#" class="profile-link">
-                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-                                    </svg>
-                                    MaiaNobara123
                                 </a>
                                 <a href="mailto:maia.nobara@gmail.com" class="profile-link">
                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
