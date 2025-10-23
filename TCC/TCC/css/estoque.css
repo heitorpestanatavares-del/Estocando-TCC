@@ -1,0 +1,111 @@
+/* Base */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f6f8fb;--card:#fff;--muted:#6b7280;--primary:#2563eb;--accent:#1f77d9;
+  --danger:#e11d48;--success:#10b981;--low:#f59e0b;
+  --radius:10px;--shadow:0 8px 20px rgba(16,24,40,0.06);
+}
+body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial; background:var(--bg); color:#0f172a; min-height:100vh;}
+
+/* layout */
+.container{display:flex;height:100vh;overflow:hidden}
+.sidebar{
+  width:260px;padding:22px 18px;background:var(--card);border-right:1px solid #e6edf3;display:flex;flex-direction:column;gap:12px;
+}
+.logo{display:flex;align-items:center;gap:12px;padding-bottom:8px;border-bottom:1px solid #f1f5f9}
+.logo-icon{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+.logo-text{font-weight:700;font-size:18px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;color:#0f172a;text-decoration:none;font-size:14px}
+.nav-item svg{width:18px;height:18px}
+.nav-item:hover{background:#f3f7fb}
+.nav-item.active{background:var(--primary);color:#fff}
+
+/* user profile bottom */
+.user-profile{margin-top:auto;display:flex;align-items:center;gap:12px;padding:12px;background:linear-gradient(180deg,#fff,#fbfdff);border-radius:8px;border:1px solid #eef2f7}
+.user-avatar{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#94a3b8,#64748b);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+.user-info h4{font-size:13px}
+.user-info p{font-size:12px;color:var(--muted)}
+.theme-btn{margin-left:auto;background:transparent;border:none;cursor:pointer}
+
+/* main */
+.main-content{flex:1;padding:28px;overflow:auto}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.title h1{font-size:22px}
+.title .muted{color:var(--muted);font-size:13px;margin-top:4px}
+.actions .btn-primary{background:var(--primary);color:#fff;padding:10px 14px;border-radius:10px;border:none;box-shadow:var(--shadow)}
+
+/* summary cards */
+.summary{display:flex;gap:12px;margin:18px 0}
+.card{background:var(--card);padding:14px;border-radius:12px;box-shadow:var(--shadow);min-width:150px}
+.card.small{width:180px}
+.card-title{color:var(--muted);font-size:13px}
+.card-value{font-size:20px;font-weight:700}
+.card-value.low{color:var(--low)}
+
+/* controls */
+.controls{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.tabs{display:flex;gap:8px}
+.tab{padding:8px 12px;border-radius:999px;border:none;background:transparent;cursor:pointer;color:var(--muted)}
+.tab.active{background:#eaf2ff;color:var(--primary);box-shadow:var(--shadow)}
+.filters{display:flex;gap:8px;align-items:center}
+.filters input[type=search], .filters select{padding:10px 12px;border-radius:10px;border:1px solid #e6edf3;background:#fff;min-width:220px}
+.btn-outline{background:transparent;border:1px solid #dbeafe;padding:10px 12px;border-radius:10px;cursor:pointer}
+
+/* list */
+.list-area{margin-top:12px}
+.table-wrapper{background:transparent}
+.list-cards{display:flex;flex-direction:column;gap:10px}
+.product-row{display:grid;grid-template-columns:92px 1fr auto 80px;align-items:center;background:var(--card);padding:12px;border-radius:10px;border:1px solid #eef6ff}
+.prod-thumb{width:80px;height:64px;object-fit:cover;border-radius:8px;background:#f8fafc}
+.prod-info{padding-left:12px}
+.prod-name{font-size:15px}
+.badge{display:inline-block;padding:6px 10px;border-radius:999px;background:#eef2ff;color:var(--primary);font-size:12px;margin-top:6px}
+.prod-meta{margin-top:8px;color:var(--muted);display:flex;gap:12px;align-items:center}
+.price{font-weight:700;color:#0f172a}
+.status{padding-left:20px}
+.status-badge{display:inline-block;padding:6px 10px;border-radius:999px;font-size:13px}
+.status-badge.normal{background:#e6fffa;color:#027a5a}
+.status-badge.low{background:#fff7ed;color:#b45309}
+.status-badge.out{background:#fff1f2;color:#9f1239}
+.prod-actions{display:flex;flex-direction:column;gap:8px}
+.icon-btn{background:transparent;border:none;cursor:pointer;font-size:18px}
+
+/* low/out highlight */
+.low-stock{border-left:4px solid var(--low)}
+.out-stock{border-left:4px solid var(--danger)}
+
+/* pagination */
+.pagination{display:flex;gap:8px;justify-content:center;margin-top:12px}
+.page-btn{padding:8px 12px;border-radius:8px;border:1px solid #e6edf3;background:#fff;cursor:pointer}
+.page-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+/* modal */
+.modal{display:none;position:fixed;inset:0;background:rgba(2,6,23,0.45);align-items:center;justify-content:center;z-index:2000}
+.modal-content{background:var(--card);width:760px;max-width:96%;border-radius:12px;padding:18px;box-shadow:0 20px 50px rgba(2,6,23,0.2)}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-grid .full{grid-column:1/-1}
+.form-grid label{display:block}
+.form-grid input, .form-grid textarea{width:100%;padding:10px;border:1px solid #e6edf3;border-radius:8px;background:#fff}
+.image-uploader{display:flex;gap:12px;align-items:center}
+.preview{min-width:160px;min-height:100px;border-radius:8px;border:1px dashed #e6edf3;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:12px}
+
+/* responsive */
+@media(max-width:900px){
+  .container{flex-direction:column}
+  .sidebar{width:100%;flex-direction:row;gap:8px;overflow:auto;padding:12px}
+  .main-content{padding:14px}
+  .form-grid{grid-template-columns:1fr}
+  .product-row{grid-template-columns:80px 1fr auto}
+}
+
+/* dark theme */
+body.dark-theme{
+  --bg:#0b1220;--card:#0f1724;--muted:#9aa6b2;--primary:#3b82f6;--accent:#1f77d9;
+  --danger:#fb7185;--success:#34d399;--low:#fbbf24;--shadow:0 8px 20px rgba(2,6,23,0.7);
+  color:#e6eef8;
+}
+body.dark-theme .sidebar{border-right-color:#0b1220}
+body.dark-theme .nav-item:hover{background:#071226}
+body.dark-theme .product-row{background:#071226;border-color:#081428}
