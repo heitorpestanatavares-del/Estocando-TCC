@@ -210,7 +210,7 @@ unset($_SESSION['form_email']);
         </div>
     </div>
 
-    <script src="js/script.js"></script>
+    <script src="js/cadastrar.js"></script>
     <script>
         function validarFormulario() {
             const loadingIndicator = document.getElementById('loadingIndicator');

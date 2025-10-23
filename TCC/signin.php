@@ -162,7 +162,7 @@ unset($_SESSION['sucesso_cadastro']);
                     <h2 class="text-white text-3xl font-bold">Estocando</h2>
                 </div>
                 <p class="text-gray-400 text-lg">
-                    O MELHOR site de estoque de baixa renda que você já viu!!!
+                   O MELHOR site de estoque de baixa renda que você já viu!!!
                     <br>
                     Bom pelo menos a gente tenta...
                 </p>
@@ -170,6 +170,6 @@ unset($_SESSION['sucesso_cadastro']);
         </div>
     </div>
 
-    <script src="js/script.js"></script>
+    <script src="js/cadastrar.js"></script>
 </body>
 </html>

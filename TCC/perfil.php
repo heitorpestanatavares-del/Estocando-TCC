@@ -1,11 +1,11 @@
 <?php
-// perfilPag.php - Página de perfil do usuário
+// perfil.php - Página de perfil do usuário
 session_start();
 require_once 'conexao.php';
 
 // Verificar se o usuário está logado
 if (!isset($_SESSION['id_usuario'])) {
-    header('Location: login.php');
+    header('Location: login.php'); // Redirecionar para login
     exit;
 }
 
@@ -25,13 +25,10 @@ $stmt->bind_param("i", $id_usuario);
 $stmt->execute();
 $resultado = $stmt->get_result();
 $perfil = $resultado->fetch_assoc();
-$stmt->close();
 
 // Se não existe perfil, criar valores padrão
 if ($perfil['id'] === null) {
     $perfil = [
-        'nome_cadastro' => $perfil['nome_cadastro'],
-        'email_cadastro' => $perfil['email_cadastro'],
         'nome_exibicao' => $perfil['nome_cadastro'],
         'email' => $perfil['email_cadastro'],
         'telefone' => '',
@@ -204,5 +201,6 @@ $foto_url = !empty($perfil['foto_perfil']) && file_exists($perfil['foto_perfil']
 </body>
 </html>
 <?php
-// NÃO FECHAR A CONEXÃO AQUI - ela é fechada pela sidebar.php
+$stmt->close();
+$conexao->close();
 ?>
