@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 14/10/2025 às 16:30
+-- Tempo de geração: 23/10/2025 às 23:29
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -54,22 +54,27 @@ INSERT INTO `cadastrar` (`id`, `nome`, `email`, `cnpj`, `senha`) VALUES
 CREATE TABLE `perfil` (
   `id` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL,
+  `nome_exibicao` varchar(100) DEFAULT NULL,
+  `email` varchar(200) DEFAULT NULL,
   `telefone` varchar(20) DEFAULT NULL,
   `empresa` varchar(255) DEFAULT NULL,
   `cargo` varchar(100) DEFAULT NULL,
   `departamento` varchar(100) DEFAULT NULL,
   `localizacao` varchar(255) DEFAULT NULL,
   `bio` text DEFAULT NULL,
-  `foto_perfil` varchar(255) DEFAULT NULL
+  `foto_perfil` varchar(255) DEFAULT NULL,
+  `banner_perfil` varchar(255) DEFAULT NULL,
+  `data_criacao` datetime DEFAULT current_timestamp(),
+  `data_atualizacao` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `perfil`
 --
 
-INSERT INTO `perfil` (`id`, `id_usuario`, `telefone`, `empresa`, `cargo`, `departamento`, `localizacao`, `bio`, `foto_perfil`) VALUES
-(1, 8, '098765432', 'asdfghj', 'asdfg', 'rh', 'sdfgh', 'oi?', NULL),
-(2, 9, '1234567', 'empresa do malvado doofenshmirtz SA.', 'Gerente ', 'rh', 'Rua das Nações n°2562', 'eu te odeio perry o ornitorrinco!!!', 'uploads/68ee55dead4c2.png');
+INSERT INTO `perfil` (`id`, `id_usuario`, `nome_exibicao`, `email`, `telefone`, `empresa`, `cargo`, `departamento`, `localizacao`, `bio`, `foto_perfil`, `banner_perfil`, `data_criacao`, `data_atualizacao`) VALUES
+(1, 8, 'Iraco', 'heitor.p.tavares@aluno.senai.br', '098765432', 'asdfghj', 'asdfg', 'rh', 'sdfgh', 'oi?', NULL, NULL, '2025-10-23 18:14:53', '2025-10-23 18:14:53'),
+(2, 9, 'Maia', 'maiahelena@gmail.com', '1234567', 'empresa do malvado doofenshmirtz SA.', 'Gerente ', 'rh0', 'Rua das Nações n°2562', 'eu te odeio perry o ornitorrinco!!!', 'uploads/68fa9bd1139a6.webp', NULL, '2025-10-23 18:14:53', '2025-10-23 18:27:16');
 
 -- --------------------------------------------------------
 
