@@ -1,9 +1,7 @@
 <?php
-// perfilPag.php - Página de perfil do usuário
 session_start();
 require_once 'conexao.php';
 
-// Verificar se o usuário está logado
 if (!isset($_SESSION['id_usuario'])) {
     header('Location: login.php');
     exit;
@@ -11,7 +9,6 @@ if (!isset($_SESSION['id_usuario'])) {
 
 $id_usuario = $_SESSION['id_usuario'];
 
-// Buscar dados do perfil
 $sql = "SELECT 
             c.nome as nome_cadastro,
             c.email as email_cadastro,
@@ -27,7 +24,6 @@ $resultado = $stmt->get_result();
 $perfil = $resultado->fetch_assoc();
 $stmt->close();
 
-// Se não existe perfil, criar valores padrão
 if ($perfil['id'] === null) {
     $perfil = [
         'nome_cadastro' => $perfil['nome_cadastro'],
@@ -45,11 +41,9 @@ if ($perfil['id'] === null) {
     ];
 }
 
-// Usar valores de cadastro se estiverem vazios
 $perfil['nome_exibicao'] = $perfil['nome_exibicao'] ?? $perfil['nome_cadastro'];
 $perfil['email'] = $perfil['email'] ?? $perfil['email_cadastro'];
 
-// URL das imagens
 $foto_url = !empty($perfil['foto_perfil']) && file_exists($perfil['foto_perfil']) 
     ? $perfil['foto_perfil'] 
     : 'https://via.placeholder.com/150';
@@ -152,7 +146,7 @@ $foto_url = !empty($perfil['foto_perfil']) && file_exists($perfil['foto_perfil']
 
                 <div class="form-group">
                     <label>Telefone</label>
-                    <input type="tel" class="form-input" id="phone" value="<?php echo htmlspecialchars($perfil['telefone'] ?? ''); ?>">
+                    <input type="tel" class="form-input" id="phone" value="<?php echo htmlspecialchars($perfil['telefone'] ?? ''); ?>" placeholder="(00) 00000-0000" maxlength="15">
                 </div>
             </div>
 
@@ -200,9 +194,26 @@ $foto_url = !empty($perfil['foto_perfil']) && file_exists($perfil['foto_perfil']
         <span>PERSONALIZAR</span>
     </button>
 
+    <!-- Modal de confirmação de troca de email -->
+    <div id="emailModal" class="modal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>⚠️ Confirmar alteração de e-mail</h3>
+            </div>
+            <div class="modal-body">
+                <p>Você está prestes a alterar seu e-mail de acesso.</p>
+                <p><strong>Email atual:</strong> <span id="emailAtual"></span></p>
+                <p><strong>Novo email:</strong> <span id="emailNovo"></span></p>
+                <p class="modal-warning">Esta ação pode afetar seu login. Tem certeza?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="cancelEmailChange()">Cancelar</button>
+                <button class="btn btn-primary" onclick="confirmEmailChange()">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
     <script src="perfil.js"></script>
 </body>
 </html>
-<?php
-// NÃO FECHAR A CONEXÃO AQUI - ela é fechada pela sidebar.php
-?>

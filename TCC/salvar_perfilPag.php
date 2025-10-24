@@ -31,6 +31,7 @@ if (empty($dados['email']) || !filter_var($dados['email'], FILTER_VALIDATE_EMAIL
 }
 
 if (!empty($erros)) {
+    error_log("Erros de validação: " . implode(', ', $erros));
     echo json_encode(['erro' => implode(', ', $erros)]);
     exit;
 }
@@ -41,6 +42,8 @@ $stmt_check = $conexao->prepare($sql_check);
 $stmt_check->bind_param("i", $id_usuario);
 $stmt_check->execute();
 $resultado = $stmt_check->get_result();
+
+error_log("Perfil existe? " . ($resultado->num_rows > 0 ? 'SIM' : 'NÃO'));
 
 if ($resultado->num_rows > 0) {
     // Atualizar perfil existente
@@ -56,6 +59,13 @@ if ($resultado->num_rows > 0) {
             WHERE id_usuario = ?";
     
     $stmt = $conexao->prepare($sql);
+    
+    if (!$stmt) {
+        error_log("Erro ao preparar UPDATE: " . $conexao->error);
+        echo json_encode(['erro' => 'Erro ao preparar query: ' . $conexao->error]);
+        exit;
+    }
+    
     $stmt->bind_param(
         "ssssssssi",
         $dados['nome_exibicao'],
@@ -75,6 +85,13 @@ if ($resultado->num_rows > 0) {
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
     $stmt = $conexao->prepare($sql);
+    
+    if (!$stmt) {
+        error_log("Erro ao preparar INSERT: " . $conexao->error);
+        echo json_encode(['erro' => 'Erro ao preparar query: ' . $conexao->error]);
+        exit;
+    }
+    
     $stmt->bind_param(
         "issssssss",
         $id_usuario,
@@ -90,11 +107,13 @@ if ($resultado->num_rows > 0) {
 }
 
 if ($stmt->execute()) {
+    error_log("Perfil salvo com sucesso!");
     echo json_encode([
         'sucesso' => true,
         'mensagem' => 'Perfil atualizado com sucesso!'
     ]);
 } else {
+    error_log("Erro ao executar query: " . $stmt->error);
     echo json_encode([
         'erro' => 'Erro ao salvar perfil: ' . $stmt->error
     ]);
@@ -103,4 +122,6 @@ if ($stmt->execute()) {
 $stmt->close();
 $stmt_check->close();
 $conexao->close();
+
+error_log("=== FIM SALVAMENTO PERFIL ===");
 ?>

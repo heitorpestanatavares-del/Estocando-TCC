@@ -1,5 +1,8 @@
 // perfil.js - Script para funcionalidades da página de perfil
 
+let emailOriginal = '';
+let dadosPendentes = null;
+
 // Animação do banner estilo Aurora Boreal
 function initBanner() {
     const canvas = document.getElementById('bannerCanvas');
@@ -103,26 +106,22 @@ function initPhotoUpload() {
         const file = e.target.files[0];
         if (!file) return;
         
-        // Validar tipo
         if (!file.type.match('image.*')) {
             showNotification('Por favor, selecione uma imagem válida', 'error');
             return;
         }
         
-        // Validar tamanho (5MB)
         if (file.size > 5 * 1024 * 1024) {
             showNotification('Imagem muito grande. Máximo 5MB', 'error');
             return;
         }
         
-        // Preview local
         const reader = new FileReader();
         reader.onload = function(event) {
             const imageUrl = event.target.result;
             previewImage.src = imageUrl;
             profileImage.src = imageUrl;
             
-            // Animação de feedback
             previewImage.style.transform = 'scale(0.9)';
             setTimeout(() => {
                 previewImage.style.transform = 'scale(1)';
@@ -130,7 +129,6 @@ function initPhotoUpload() {
         };
         reader.readAsDataURL(file);
         
-        // Upload para o servidor
         const formData = new FormData();
         formData.append('foto', file);
         
@@ -142,7 +140,6 @@ function initPhotoUpload() {
         .then(data => {
             if (data.sucesso) {
                 showNotification('Foto atualizada com sucesso!', 'success');
-                // Atualizar também na sidebar
                 const sidebarAvatar = document.querySelector('.sidebar-footer .user-avatar');
                 if (sidebarAvatar) {
                     sidebarAvatar.src = data.url;
@@ -164,9 +161,11 @@ function initPhotoUpload() {
 
 // Salvar alterações
 function saveChanges() {
+    const emailAtual = document.getElementById('email').value;
+    
     const data = {
         nome_exibicao: document.getElementById('displayName').value,
-        email: document.getElementById('email').value,
+        email: emailAtual,
         telefone: document.getElementById('phone').value,
         empresa: document.getElementById('company').value,
         cargo: document.getElementById('position').value,
@@ -175,7 +174,6 @@ function saveChanges() {
         bio: document.getElementById('bio').value
     };
     
-    // Validação básica
     if (!data.nome_exibicao.trim()) {
         showNotification('Por favor, preencha o nome de exibição', 'error');
         return;
@@ -186,13 +184,41 @@ function saveChanges() {
         return;
     }
     
-    // Animação do botão
-    const btn = event.target;
+    // Verificar se o email foi alterado
+    if (emailAtual !== emailOriginal) {
+        dadosPendentes = data;
+        document.getElementById('emailAtual').textContent = emailOriginal;
+        document.getElementById('emailNovo').textContent = emailAtual;
+        document.getElementById('emailModal').style.display = 'block';
+        return;
+    }
+    
+    salvarPerfil(data);
+}
+
+// Confirmar troca de email
+function confirmEmailChange() {
+    document.getElementById('emailModal').style.display = 'none';
+    if (dadosPendentes) {
+        salvarPerfil(dadosPendentes);
+        dadosPendentes = null;
+    }
+}
+
+// Cancelar troca de email
+function cancelEmailChange() {
+    document.getElementById('emailModal').style.display = 'none';
+    document.getElementById('email').value = emailOriginal;
+    dadosPendentes = null;
+}
+
+// Função para salvar perfil
+function salvarPerfil(data) {
+    const btn = document.querySelector('.form-actions .btn-primary:last-child');
     const textoOriginal = btn.innerHTML;
     btn.disabled = true;
     btn.innerHTML = '<svg class="spinner" width="16" height="16" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none" opacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round"/></svg> Salvando...';
     
-    // Enviar para o servidor
     fetch('salvar_perfilPag.php', {
         method: 'POST',
         headers: {
@@ -206,41 +232,14 @@ function saveChanges() {
         btn.innerHTML = textoOriginal;
         
         if (result.sucesso) {
-            showNotification('Alterações salvas com sucesso!', 'success');
+            showNotification('Perfil atualizado com sucesso!', 'success');
+            emailOriginal = data.email;
             
-            // Atualizar nome no perfil
-            document.querySelector('.profile-name').textContent = data.nome_exibicao;
-            document.querySelector('.profile-bio').textContent = data.bio;
-            
-            // Atualizar na sidebar
-            const sidebarName = document.querySelector('.sidebar-footer .user-name');
-            if (sidebarName) {
-                sidebarName.textContent = data.nome_exibicao;
-            }
-            const sidebarEmail = document.querySelector('.sidebar-footer .user-email');
-            if (sidebarEmail) {
-                const emailCurto = data.email.length > 20 ? data.email.substring(0, 17) + '...' : data.email;
-                sidebarEmail.textContent = emailCurto;
-            }
-            
-            // Atualizar links de contato
-            const telefoneLink = document.querySelector('.profile-links a[href^="tel"]');
-            if (telefoneLink && data.telefone) {
-                telefoneLink.href = 'tel:' + data.telefone;
-                telefoneLink.querySelector('~ span, + span')?.remove();
-                telefoneLink.innerHTML = telefoneLink.innerHTML.split('</svg>')[0] + '</svg>' + data.telefone;
-            }
-            
-            const emailLink = document.querySelector('.profile-links a[href^="mailto"]');
-            if (emailLink) {
-                emailLink.href = 'mailto:' + data.email;
-                const svgIcon = emailLink.querySelector('svg');
-                emailLink.innerHTML = '';
-                emailLink.appendChild(svgIcon);
-                emailLink.appendChild(document.createTextNode(data.email));
-            }
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500);
         } else {
-            showNotification(result.erro || 'Erro ao salvar alterações', 'error');
+            showNotification(result.erro || 'Erro ao salvar', 'error');
         }
     })
     .catch(error => {
@@ -254,7 +253,7 @@ function saveChanges() {
 // Cancelar alterações
 function cancelChanges() {
     if (confirm('Deseja realmente cancelar as alterações?')) {
-        location.reload(); // Recarregar página para restaurar valores
+        location.reload();
     }
 }
 
@@ -315,6 +314,22 @@ function isValidEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
+// Máscara de telefone brasileiro
+function mascaraTelefone(valor) {
+    valor = valor.replace(/\D/g, '');
+    valor = valor.substring(0, 11);
+    
+    if (valor.length <= 10) {
+        valor = valor.replace(/^(\d{2})(\d)/, '($1) $2');
+        valor = valor.replace(/(\d{4})(\d)/, '$1-$2');
+    } else {
+        valor = valor.replace(/^(\d{2})(\d)/, '($1) $2');
+        valor = valor.replace(/(\d{5})(\d)/, '$1-$2');
+    }
+    
+    return valor;
+}
+
 // Adicionar animações CSS
 const style = document.createElement('style');
 style.textContent = `
@@ -363,7 +378,36 @@ document.addEventListener('DOMContentLoaded', function() {
     initBanner();
     initPhotoUpload();
     
-    // Adicionar transições suaves aos inputs
+    emailOriginal = document.getElementById('email').value;
+    
+    const phoneInput = document.getElementById('phone');
+    
+    phoneInput.addEventListener('input', function(e) {
+        const start = e.target.selectionStart;
+        const end = e.target.selectionEnd;
+        e.target.value = mascaraTelefone(e.target.value);
+        e.target.setSelectionRange(start, end);
+    });
+    
+    phoneInput.addEventListener('keypress', function(e) {
+        if (!/[0-9]/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete' && e.key !== 'Tab' && e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') {
+            e.preventDefault();
+        }
+    });
+    
+    if (phoneInput.value) {
+        phoneInput.value = mascaraTelefone(phoneInput.value);
+    }
+    
+    const modal = document.getElementById('emailModal');
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this || e.target.classList.contains('modal-overlay')) {
+                cancelEmailChange();
+            }
+        });
+    }
+    
     document.querySelectorAll('.form-input').forEach(input => {
         input.addEventListener('focus', function() {
             this.style.transform = 'scale(1.01)';
@@ -374,7 +418,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Animação de entrada dos cards
     const cards = document.querySelectorAll('.profile-card');
     cards.forEach((card, index) => {
         card.style.opacity = '0';
